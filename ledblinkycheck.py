@@ -11,7 +11,7 @@ client = pushover.PushoverClient("/etc/pushover.creds")
 now = datetime.datetime.now()
 now_str = now.strftime("%m-%d-%Y %H:%M")
 
-with open("./ledblinky.ver", "r") as file:
+with open("./data/ledblinky.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
 print(f"Existing LEDBlinky version is: {oldversion}")
 
@@ -31,9 +31,13 @@ newversion = f'{maj_ver}.{min_ver}.{pat_ver}'
 
 print("LEDBlinky Current Version:", newversion)
 
+with open("./data/lastcheck", "w") as file:
+    file.write(f"{now_str}\n")
+    file.write("LedBlinky\n")
+
 if oldversion != newversion:
     print(f"Existing LEDBlinky version {oldversion} is different then current version {newversion}")
-    with open("./ledblinky.ver", "w") as file:
+    with open("./data/ledblinky.ver", "w") as file:
         file.write(f"{newversion}\n")
         file.write(f"{now_str}\n")
         client.send_message(f"New LEDBlinky version update {newversion} is ready for download", title="New LEDBlinky Version")

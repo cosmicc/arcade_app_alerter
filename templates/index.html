@@ -31,6 +31,14 @@
 <body>
     <h1>Arcade Current Versions:</h1>
     <table>
+            <tr>
+                    <td>Last Check:</td>
+                    {% for line in file0_contents %}
+                    <td>{{ line.strip() }}</td>
+                    {% endfor %}
+            </tr>
+    </table>
+    <table>
         <tr>
             <th style="text-align: left;">Application</th>
             <th style="text-align: left;">Version</th>
