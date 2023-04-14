@@ -1,9 +1,10 @@
-# arcade_app_alerter
+# Arcade Application Update Alerter
 
-Scrapes web sites to check for new versions of apps I use for my arcade cabinet.
-Checks MAME, Launchbox, Retroarch, and LedBlinky.  
-Sends alert via Pushover on new versions.
-Also hosts a web page with a tabole showing current versions and last update timestamp.
+Scrapes web sites to check for new versions of apps I use for my arcade cabinet.<br>
+Checks MAME, Launchbox, Retroarch, and LedBlinky.  <br>
+Sends alert via Pushover on new versions.<br>
+Also hosts a web page with a tabole showing current versions and last update timestamp.<br>
 
-Run individual checks with cron
-Run webview with systemd service
+Run individual checks with cron<br>
+Run webview with systemd service<br>
+Add pushover credentials to pushover.creds and save it to /etc<br>
