@@ -33,40 +33,41 @@
     <table>
             <tr>
                     <td>Last Check:</td>
-                    {% for line in file0_contents %}
-                    <td>{{ line.strip() }}</td>
-                    {% endfor %}
+                    <td>{{ lastcheckapp }}</td>
+                    <td>{{ lastcheckelapsed }}</td>
+                    <td>{{ lastcheckdate }}</td>
             </tr>
     </table>
     <table>
         <tr>
             <th style="text-align: left;">Application</th>
             <th style="text-align: left;">Version</th>
+	    <th style="text-align: left;">Elapsed Time</th>
 	    <th style="text-align: left;">Release Date</th>
         </tr>
         <tr>
             <td>MAME</td>
-	    {% for line in file1_contents %}
-            <td>{{ line.strip() }}</td>
-	    {% endfor %}
+            <td>{{ mamever.strip() }}</td>
+            <td>{{ mameelapsed.strip() }}</td>
+	    <td>{{ mamedate.strip() }}</td>
         </tr>
         <tr>
             <td>Launchbox</td>
-            {% for line in file2_contents %}
-            <td>{{ line.strip() }}</td>
-            {% endfor %}
+            <td>{{ launchboxver.strip() }}</td>
+            <td>{{ launchboxelapsed.strip() }}</td>
+	    <td>{{ launchboxdate.strip() }}</td>
         </tr>
         <tr>
             <td>Retroarch</td>
-            {% for line in file3_contents %}
-            <td>{{ line.strip() }}</td>
-            {% endfor %}
+            <td>{{ retroarchver.strip() }}</td>
+            <td>{{ retroarchelapsed.strip() }}</td>
+	    <td>{{ retroarchdate.strip() }}</td>
         </tr>
         <tr>
             <td>LedBlinky</td>
-            {% for line in file4_contents %}
-            <td>{{ line.strip() }}</td>
-            {% endfor %}
+            <td>{{ ledblinkyver.strip() }}</td>
+            <td>{{ ledblinkyelapsed.strip() }}</td>
+	    <td>{{ ledblinkydate.strip() }}</td>
         </tr>
     </table>
 </body>
