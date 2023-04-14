@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arcade App Versions</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+            background-color: rgb(20,30, 1); /* Set gray background color */
+            font-family: Arial, sans-serif; /* Set font family */
+            color: rgb(255,255,186); /* Set light yellow text color */
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Add some padding to the body */
+        }
+        table {
+            width: 100%; /* Set table width to 100% */
+            border-collapse: collapse; /* Collapse table borders */
+            margin-top: 20px; /* Add margin to the top of the table */
+        }
+        th, td {
+            padding: 8px; /* Add padding to table cells */
+            border: 1px solid #ddd; /* Add border to table cells */
+            text-align: left; /* Set text alignment to left */
+        }
+        th {
+            background-color: rgb(255,255,186); /* Set light yellow background color for table headers */
+	    color: rgb(20,20,1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Arcade Current Versions:</h1>
+    <table>
+        <tr>
+            <th style="text-align: left;">Application</th>
+            <th style="text-align: left;">Version</th>
+	    <th style="text-align: left;">Release Date</th>
+        </tr>
+        <tr>
+            <td>MAME</td>
+	    {% for line in file1_contents %}
+            <td>{{ line.strip() }}</td>
+	    {% endfor %}
+        </tr>
+        <tr>
+            <td>Launchbox</td>
+            {% for line in file2_contents %}
+            <td>{{ line.strip() }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>Retroarch</td>
+            {% for line in file3_contents %}
+            <td>{{ line.strip() }}</td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td>LedBlinky</td>
+            {% for line in file4_contents %}
+            <td>{{ line.strip() }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+</body>
+</html>

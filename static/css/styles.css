@@ -1,0 +1,4 @@
+/* Set text color to light yellow */
+body, th, td {
+    color: rgb(255,255,186);
+}
