@@ -11,7 +11,8 @@ client = pushover.PushoverClient("/etc/pushover.creds")
 work_dir = "/opt/arcade_app_alerter"
 
 now = datetime.datetime.now()
-now_str = now.strftime("%m-%d-%Y %H:%M")
+now_strws = now.strftime("%m-%d-%Y %H:%M")
+now_str = now.strftime("%m-%d-%Y")
 
 with open(f"{work_dir}/data/mame.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
@@ -47,7 +48,7 @@ if found_element:
 
     if match:
         with open(f"{work_dir}/data/lastcheck", "w") as file:
-            file.write(f"{now_str}\n")
+            file.write(f"{now_strws}\n")
             file.write("MAME\n")
         version1 = match.group(1)
         version2 = match.group(2)
