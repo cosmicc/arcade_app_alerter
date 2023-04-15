@@ -8,11 +8,12 @@ import datetime
 # Define the URL of the webpage you want to scrape
 url = 'https://pleasuredome.github.io/pleasuredome/mame/index.html'
 client = pushover.PushoverClient("/etc/pushover.creds")
+work_dir = "/opt/arcade_app_alerter"
 
 now = datetime.datetime.now()
 now_str = now.strftime("%m-%d-%Y %H:%M")
 
-with open("./data/mame.ver", "r") as file:
+with open(f"{work_dir}/data/mame.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
 print(f"Existing MAME version is: {oldversion}")
 
@@ -45,7 +46,7 @@ if found_element:
     match = re.search(pattern, split_line[1])
 
     if match:
-        with open("./data/lastcheck", "w") as file:
+        with open(f"{work_dir}/data/lastcheck", "w") as file:
             file.write(f"{now_str}\n")
             file.write("MAME\n")
         version1 = match.group(1)
@@ -55,7 +56,7 @@ if found_element:
         if oldversion != version2:
             print(f"Existing MAME version {oldversion} is different then Pleasuredome version {version2}")
 
-            with open("./data/mame.ver", "w") as file:
+            with open(f"{work_dir}/data/mame.ver", "w") as file:
                 file.write(f"{version2}\n")
                 file.write(f"{now_str}\n")
             client.send_message(f"New MAME version update {version2} is preparing for download", title="New MAME Version")
