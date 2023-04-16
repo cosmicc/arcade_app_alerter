@@ -13,10 +13,10 @@ work_dir = "/opt/arcade_app_alerter"
 now = datetime.datetime.now()
 now_strws = now.strftime("%m-%d-%Y %H:%M")
 now_str = now.strftime("%m-%d-%Y")
+now_ts = now.strftime("%m-%d-%Y %H:%M:%S")
 
 with open(f"{work_dir}/data/mame.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
-print(f"Existing MAME version is: {oldversion}")
 
 # Send a GET request to the URL and retrieve the content
 response = requests.get(url)
@@ -52,31 +52,30 @@ if found_element:
             file.write("MAME\n")
         version1 = match.group(1)
         version2 = match.group(2)
-        print("Pleasuredome Current Version:", version2)
 
         if oldversion != version2:
-            print(f"Existing MAME version {oldversion} is different then Pleasuredome version {version2}")
+            print(f"[{now_ts}] Existing MAME version {oldversion} is different then Pleasuredome version {version2}")
 
             with open(f"{work_dir}/data/mame.ver", "w") as file:
                 file.write(f"{version2}\n")
                 file.write(f"{now_str}\n")
-            client.send_message(f"New MAME version update {version2} is preparing for download", title="New MAME Version")
-            try:
+            client.send_message(f"New MAME version update {version2} is ready for download", title="New MAME Version")
+            #try:
                 #tc = transmissionrpc.Client('192.168.1.1', port='9091')
                 #tc.authenticate('user', 'pass')
-                tc.add_torrent(update_roms_link)
-                tc.add_torrent(update_CHDs_link)
-                tc.add_torrent(update_software_link)
-                tc.add_torrent(update_extras_link)
-                tc.close()
-            except:
-                client.send_message(f"Error sending version {version2} downloads to transmission server", title="MAME Download Error")
+                #tc.add_torrent(update_roms_link)
+                #tc.add_torrent(update_CHDs_link)
+                #tc.add_torrent(update_software_link)
+                #tc.add_torrent(update_extras_link)
+                #tc.close()
+            #except:
+                #client.send_message(f"Error sending version {version2} downloads to transmission server", title="MAME Download Error")
         else:
-            print(f"Version {oldversion} is current, nothing to do")
+            print(f"[{now_ts}] MAME Version {oldversion} is current")
     else:
-        print("ERROR: No version numbers found in the input string.")
+        print(f"[{now_ts}] MAME ERROR: No version numbers found in the input string.")
         client.send_message(f"MAME update check error! No version numbers found", title="MAME Check Error")
 else:
-    print("ERROR: Text not found.")
+    print(f"[{now_ts}] MAME ERROR: Text not found.")
     client.send_message(f"MAME update check error! Text not found", title="MAME Check Error")
 

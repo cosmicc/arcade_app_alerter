@@ -10,10 +10,10 @@ work_dir = "/opt/arcade_app_alerter"
 
 now = datetime.datetime.now()
 now_str = now.strftime("%m-%d-%Y %H:%M")
+now_ts = now.strftime("%m-%d-%Y %H:%M:%S")
 
 with open(f"{work_dir}/data/launchbox.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
-print(f"Existing Launchbox version is: {oldversion}")
 
 # Send a GET request to the webpage
 url = 'https://www.launchbox-app.com/about/changelog'
@@ -37,25 +37,25 @@ try:
 
     if v1split[4] == "?":
         newversion = v2split[1]
-        print(f"Beta Version: {v1split[1]}")
-        print(f"Release Version: {v2split[1]}")
+        #print(f"Beta Version: {v1split[1]}")
+        #print(f"Release Version: {v2split[1]}")
     else:
         newversion = v1split[1]
-        print(f"Release Version: {v1split[1]}")
+        #print(f"Release Version: {v1split[1]}")
 
     with open(f"{work_dir}/data/lastcheck", "w") as file:
         file.write(f"{now_str}\n")
         file.write("Launchbox\n")
 
     if oldversion != newversion:
-        print(f"Existing MAME version {oldversion} is different then Pleasuredome version {newversion}")
+        print(f"[{now_ts}] Launchbox version {oldversion} is different then current version {newversion}")
         with open(f"{work_dir}/data/launchbox.ver", "w") as file:
             file.write(f"{newversion}\n")
             file.write(f"{now_str}\n")
         client.send_message(f"New Launchbox version {newversion} is ready for download", title="New Launchbox Version")
     else:
-        print(f"Version {oldversion} is current, nothing to do")
+        print(f"[{now_ts}] Launchbox Version {oldversion} is current")
 except:
-    print("Launchbox Check Error! Cannot determine latest version")
+    print(f"[{now_ts}] Launchbox Check Error! Cannot determine latest version")
     client.send_message("Launchbox Check Error! Cannot determine latest version", title="Launchbox Check Error")
 

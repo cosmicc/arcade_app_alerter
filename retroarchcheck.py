@@ -11,10 +11,10 @@ work_dir = "/opt/arcade_app_alerter"
 
 now = datetime.datetime.now()
 now_str = now.strftime("%m-%d-%Y %H:%M")
+now_ts = now.strftime("%m-%d-%Y %H:%M:%S")
 
 with open(f"{work_dir}/data/retroarch.ver", "r") as file:
     oldversion = file.readlines()[0].strip()
-print(f"Existing Retroarch version is: {oldversion}")
 
 try:
     # Send a GET request to the URL and retrieve the content
@@ -31,21 +31,20 @@ try:
     vsoup = BeautifulSoup(html_ver, 'html.parser')
     newvertext = vsoup.text
     newversion = newvertext.split(" ")[5]
-    print(f"Retroarch current version is: {newversion}")
 
     with open(f"{work_dir}/data/lastcheck", "w") as file:
         file.write(f"{now_str}\n")
         file.write("Retroarch\n")
 
     if oldversion != newversion:
-        print(f"Existing Retroarch version {oldversion} is different then current version {newversion}")
+        print(f"[{now_ts}] Retroarch version {oldversion} is different then current version {newversion}")
         with open(f"{work_dir}/data/retroarch.ver", "w") as file:
             file.write(f"{newversion}\n")
             file.write(f"{now_str}\n")
         client.send_message(f"New Retroarch version update {newversion} is ready for download", title="New Retroarch Version")
     else:
-        print(f"Version {oldversion} is current, nothing to do")
+        print(f"[{now_ts}] Retroarch Version {oldversion} is current")
 
 except:
-    print("Retroarch Check Error! Cannot determine latest version")
+    print(f"[{now_ts}] Retroarch Check Error! Cannot determine latest version")
     client.send_message(f"Retoarch Check Error! Cannot determine latest version", title="Retroarch Check Error")

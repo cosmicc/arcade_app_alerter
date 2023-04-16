@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from datetime import datetime
+import subprocess
 
 app = Flask(__name__)
 
@@ -94,9 +95,12 @@ def index():
         lastcheckapp = file0_contents[1]
         lastcheckelapsed = elapsed_time(file0_contents[0].strip(), withsecs=True, append="ago")
 
+    result = subprocess.check_output(['tail', '-n', '20', '/var/log/arcadecheck.log'])
+    result = result.decode('utf-8')
+
     # Render the template with the values
-    return render_template('index.html', lastcheckdate=lastcheckdate, lastcheckapp=lastcheckapp, lastcheckelapsed=lastcheckelapsed, mamever=mamever, mamedate=mamedate, mameelapsed=mameelapsed, launchboxver=launchboxver, launchboxdate=launchboxdate, launchboxelapsed=launchboxelapsed, retroarchver=retroarchver, retroarchdate=retroarchdate, retroarchelapsed=retroarchelapsed, ledblinkyver=ledblinkyver, ledblinkydate=ledblinkydate, ledblinkyelapsed=ledblinkyelapsed)
+    return render_template('index.html', lastcheckdate=lastcheckdate, lastcheckapp=lastcheckapp, lastcheckelapsed=lastcheckelapsed, mamever=mamever, mamedate=mamedate, mameelapsed=mameelapsed, launchboxver=launchboxver, launchboxdate=launchboxdate, launchboxelapsed=launchboxelapsed, retroarchver=retroarchver, retroarchdate=retroarchdate, retroarchelapsed=retroarchelapsed, ledblinkyver=ledblinkyver, ledblinkydate=ledblinkydate, ledblinkyelapsed=ledblinkyelapsed, log=result)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 

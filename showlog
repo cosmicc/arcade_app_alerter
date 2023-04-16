@@ -1,0 +1,2 @@
+#!/bin/bash
+tail -100 /var/log/arcadecheck.log

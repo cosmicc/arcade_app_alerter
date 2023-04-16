@@ -1,0 +1,4 @@
+* */12 * * * /usr/bin/python /opt/arcade_app_alerter/retroarchcheck.py >> /var/log/arcadecheck.log
+* */6 * * * /usr/bin/python /opt/arcade_app_alerter/launchboxcheck.py >> /var/log/arcadecheck.log
+* */24 * * * /usr/bin/python /opt/arcade_app_alerter/ledblinkycheck.py >> /var/log/arcadecheck.log
+* */6 * * * /usr/bin/python /opt/arcade_app_alerter/mamecheck.py >> /var/log/arcadecheck.log
