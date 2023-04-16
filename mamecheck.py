@@ -75,6 +75,8 @@ if found_element:
             print(f"Version {oldversion} is current, nothing to do")
     else:
         print("ERROR: No version numbers found in the input string.")
-    
+        client.send_message(f"MAME update check error! No version numbers found", title="MAME Check Error")
 else:
     print("ERROR: Text not found.")
+    client.send_message(f"MAME update check error! Text not found", title="MAME Check Error")
+

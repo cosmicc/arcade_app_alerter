@@ -17,39 +17,45 @@ print(f"Existing Launchbox version is: {oldversion}")
 
 # Send a GET request to the webpage
 url = 'https://www.launchbox-app.com/about/changelog'
-response = requests.get(url)
+try:
+    response = requests.get(url)
 
-# Parse the HTML content using BeautifulSoup
-soup = BeautifulSoup(response.content, 'html.parser')
+    # Parse the HTML content using BeautifulSoup
+    soup = BeautifulSoup(response.content, 'html.parser')
 
-# Find the elements containing version numbers
-version_elements = soup.find_all('h4')
-# Extract the version numbers
-version_numbers = []
-for element in version_elements:
-    version_number = element.text.strip()
-    version_numbers.append(version_number)
+    # Find the elements containing version numbers
+    version_elements = soup.find_all('h4')
+    # Extract the version numbers
+    version_numbers = []
 
-v1split = version_numbers[0].split(" ")
-v2split = version_numbers[1].split(" ")
+    for element in version_elements:
+        version_number = element.text.strip()
+        version_numbers.append(version_number)
 
-if v1split[4] == "?":
-    newversion = v2split[1]
-    print(f"Beta Version: {v1split[1]}")
-    print(f"Release Version: {v2split[1]}")
-else:
-    newversion = v1split[1]
-    print(f"Release Version: {v1split[1]}")
+    v1split = version_numbers[0].split(" ")
+    v2split = version_numbers[1].split(" ")
 
-with open(f"{work_dir}/data/lastcheck", "w") as file:
-    file.write(f"{now_str}\n")
-    file.write("Launchbox\n")
+    if v1split[4] == "?":
+        newversion = v2split[1]
+        print(f"Beta Version: {v1split[1]}")
+        print(f"Release Version: {v2split[1]}")
+    else:
+        newversion = v1split[1]
+        print(f"Release Version: {v1split[1]}")
 
-if oldversion != newversion:
-    print(f"Existing MAME version {oldversion} is different then Pleasuredome version {newversion}")
-    with open(f"{work_dir}/data/launchbox.ver", "w") as file:
-        file.write(f"{newversion}\n")
+    with open(f"{work_dir}/data/lastcheck", "w") as file:
         file.write(f"{now_str}\n")
-    client.send_message(f"New Launchbox version {newversion} is ready for download", title="New Launchbox Version")
-else:
-    print(f"Version {oldversion} is current, nothing to do")
+        file.write("Launchbox\n")
+
+    if oldversion != newversion:
+        print(f"Existing MAME version {oldversion} is different then Pleasuredome version {newversion}")
+        with open(f"{work_dir}/data/launchbox.ver", "w") as file:
+            file.write(f"{newversion}\n")
+            file.write(f"{now_str}\n")
+        client.send_message(f"New Launchbox version {newversion} is ready for download", title="New Launchbox Version")
+    else:
+        print(f"Version {oldversion} is current, nothing to do")
+except:
+    print("Launchbox Check Error! Cannot determine latest version")
+    client.send_message("Launchbox Check Error! Cannot determine latest version", title="Launchbox Check Error")
+

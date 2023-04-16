@@ -98,5 +98,5 @@ def index():
     return render_template('index.html', lastcheckdate=lastcheckdate, lastcheckapp=lastcheckapp, lastcheckelapsed=lastcheckelapsed, mamever=mamever, mamedate=mamedate, mameelapsed=mameelapsed, launchboxver=launchboxver, launchboxdate=launchboxdate, launchboxelapsed=launchboxelapsed, retroarchver=retroarchver, retroarchdate=retroarchdate, retroarchelapsed=retroarchelapsed, ledblinkyver=ledblinkyver, ledblinkydate=ledblinkydate, ledblinkyelapsed=ledblinkyelapsed)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)
 
