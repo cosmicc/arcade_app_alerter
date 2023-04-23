@@ -1,8 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 from datetime import datetime
 import subprocess
 
 app = Flask(__name__)
+ALLOWED_HOST = "192.168.199.5"
 
 from datetime import datetime, timedelta
 
@@ -54,6 +55,11 @@ def elapsed_time(start_time, withsecs=True, append=None):
         return ", ".join(result) + f" {append}"
     else:
         return ", ".join(result)
+
+@app.before_request
+def limit_remote_addr():
+    if request.remote_addr != ALLOWED_HOST:
+        return "You're not allowed to access this resource", 403
 
 @app.route('/')
 def index():
