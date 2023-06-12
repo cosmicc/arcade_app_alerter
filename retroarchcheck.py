@@ -10,7 +10,7 @@ client = pushover.PushoverClient("/etc/pushover.creds")
 work_dir = "/opt/arcade_app_alerter"
 
 now = datetime.datetime.now()
-now_str = now.strftime("%m-%d-%Y %H:%M")
+now_str = now.strftime("%m-%d-%Y")
 now_ts = now.strftime("%m-%d-%Y %H:%M:%S")
 
 with open(f"{work_dir}/data/retroarch.ver", "r") as file:
@@ -33,7 +33,7 @@ try:
     newversion = newvertext.split(" ")[5]
 
     with open(f"{work_dir}/data/lastcheck", "w") as file:
-        file.write(f"{now_str}\n")
+        file.write(f"{now_ts}\n")
         file.write("Retroarch\n")
 
     if oldversion != newversion:

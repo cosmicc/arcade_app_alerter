@@ -7,7 +7,7 @@ ALLOWED_HOST = "192.168.199.5"
 
 from datetime import datetime, timedelta
 
-def elapsed_time(start_time, withsecs=True, append=None):
+def elapsed_time(start_time, withsecs, append=None):
     """Convert string representation of datetime to elapsed time string representation
     Args:
         start_time (str): Start time in the format 'MM-DD-YYYY HH:MM'
@@ -17,7 +17,7 @@ def elapsed_time(start_time, withsecs=True, append=None):
         str: Elapsed time string representation with a maximum of 2 values, e.g. '1 Hour, 45 Minutes'
     """
     if withsecs:
-        datetime_format = '%m-%d-%Y %H:%M'
+        datetime_format = '%m-%d-%Y %H:%M:%S'
     else:
         datetime_format = '%m-%d-%Y'
     start_time = datetime.strptime(start_time, datetime_format)

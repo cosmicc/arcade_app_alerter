@@ -48,7 +48,7 @@ if found_element:
 
     if match:
         with open(f"{work_dir}/data/lastcheck", "w") as file:
-            file.write(f"{now_strws}\n")
+            file.write(f"{now_ts}\n")
             file.write("MAME\n")
         version1 = match.group(1)
         version2 = match.group(2)
