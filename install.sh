@@ -5,10 +5,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Host paths
-HOST_ROOT="/opt/arcade_app"
+HOST_ROOT="/config/arcade_app"
 HOST_CONFIG="${HOST_ROOT}/config.ini"
 HOST_DATA="${HOST_ROOT}/data"
-HOST_LOG="${HOST_ROOT}/arcadecheck.log"
+HOST_LOG="/var/log/arcadecheck.log"
 
 echo "[install] Preparing host directories under ${HOST_ROOT}..."
 sudo mkdir -p "${HOST_ROOT}"
