@@ -1,4 +1,0 @@
-[pushover]
-# Insert pushover credentials here, and save this file to /etc
-app_key = my_app_key
-user_key = my_user_key

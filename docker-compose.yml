@@ -1,0 +1,33 @@
+services:
+  arcade_app:
+    container_name: arcade_app_alerter
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+
+    # Map host port 5000 -> container port 5000 (web UI)
+    # If you change [web].port in config.ini, update this mapping.
+    ports:
+      - "5000:5000"
+
+    environment:
+      # Path inside container; host file is bind-mounted below
+      - ARCADE_APP_CONFIG=/config/arcade_app/config.ini
+
+    volumes:
+      # Config file: host -> container (read-only)
+      - /config/arcade_app/config.ini:/config/arcade_app/config.ini:ro
+
+      # Data directory for .ver files and lastcheck
+      - /config/arcade_app/data:/config/arcade_app/data
+
+      # Log file for all checkers + web dashboard
+      - /var/log/arcadecheck.log:/var/log/arcadecheck.log
+
+    # If you want health status exposed via docker ps / docker inspect
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:5000/health || exit 1"]
+      interval: 1m
+      timeout: 5s
+      retries: 3

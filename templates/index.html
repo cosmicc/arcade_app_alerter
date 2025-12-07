@@ -1,76 +1,216 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Arcade App Versions</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta charset="utf-8">
+    <title>{{ title or "Arcade App Version Monitor" }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <style>
         body {
-            background-color: rgb(20,30, 1); /* Set gray background color */
-            font-family: Arial, sans-serif; /* Set font family */
-            color: rgb(255,255,186); /* Set light yellow text color */
-            margin: 0; /* Remove default margin */
-            padding: 20px; /* Add some padding to the body */
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
         }
-        table {
-            width: 100%; /* Set table width to 100% */
-            border-collapse: collapse; /* Collapse table borders */
-            margin-top: 20px; /* Add margin to the top of the table */
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 40px;
         }
-        th, td {
-            padding: 8px; /* Add padding to table cells */
-            border: 1px solid #ddd; /* Add border to table cells */
-            text-align: left; /* Set text alignment to left */
+
+        h1, h2, h3 {
+            font-weight: 500;
+            margin: 0 0 12px;
         }
-        th {
-            background-color: rgb(255,255,186); /* Set light yellow background color for table headers */
-	    color: rgb(20,20,1);
+
+        h1 {
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            margin-top: 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header-sub {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        .card {
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            padding: 16px 18px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+            margin-bottom: 18px;
+            border: 1px solid #2c2c2c;
+        }
+
+        .apps-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .apps-table th,
+        .apps-table td {
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        .apps-table th {
+            border-bottom: 1px solid #333;
+            font-weight: 500;
+            color: #c0c0c0;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .apps-table tr:nth-child(even) td {
+            background-color: #191919;
+        }
+
+        .apps-table tr:nth-child(odd) td {
+            background-color: #141414;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .badge-ok {
+            background-color: #1e4620;
+            color: #a5d6a7;
+        }
+
+        .badge-stale {
+            background-color: #5d4037;
+            color: #ffccbc;
+        }
+
+        .muted {
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        .log-container {
+            margin-top: 8px;
+        }
+
+        .log-box {
+            background-color: #000;
+            border-radius: 8px;
+            border: 1px solid #333;
+            padding: 10px 12px;
+            font-family: "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+            font-size: 0.8rem;
+            max-height: 420px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            color: #9e9e9e;
+        }
+
+        @media (max-width: 700px) {
+            .page {
+                padding: 16px 12px 32px;
+            }
+
+            .log-box {
+                max-height: 320px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Arcade Current Versions:</h1>
-    <table>
+<div class="page">
+    <div class="header">
+        <div>
+            <h1>{{ title or "Arcade App Version Monitor" }}</h1>
+            <div class="tagline">
+                Tracking versions for your arcade stack and recent check activity.
+            </div>
+        </div>
+        {% if lastcheck %}
+            <div class="header-sub">
+                Last check:
+                <strong>{{ lastcheck.timestamp }}</strong>
+                &nbsp;({{ lastcheck.elapsed }}&nbsp;by {{ lastcheck.app }})
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Versions card -->
+    <div class="card">
+        <h2>Application Versions</h2>
+        <table class="apps-table">
+            <thead>
             <tr>
-                    <td>Last Check:</td>
-                    <td>{{ lastcheckapp }}</td>
-                    <td>{{ lastcheckelapsed }}</td>
-                    <td>{{ lastcheckdate }}</td>
+                <th>App</th>
+                <th>Current Version</th>
+                <th>Last Updated</th>
+                <th>Age</th>
             </tr>
-    </table>
-    <table>
-        <tr>
-            <th style="text-align: left;">Application</th>
-            <th style="text-align: left;">Version</th>
-	    <th style="text-align: left;">Elapsed Time</th>
-	    <th style="text-align: left;">Release Date</th>
-        </tr>
-        <tr>
-            <td>MAME</td>
-            <td>{{ mamever.strip() }}</td>
-            <td>{{ mameelapsed.strip() }}</td>
-	    <td>{{ mamedate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>Launchbox</td>
-            <td>{{ launchboxver.strip() }}</td>
-            <td>{{ launchboxelapsed.strip() }}</td>
-	    <td>{{ launchboxdate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>Retroarch</td>
-            <td>{{ retroarchver.strip() }}</td>
-            <td>{{ retroarchelapsed.strip() }}</td>
-	    <td>{{ retroarchdate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>LedBlinky</td>
-            <td>{{ ledblinkyver.strip() }}</td>
-            <td>{{ ledblinkyelapsed.strip() }}</td>
-	    <td>{{ ledblinkydate.strip() }}</td>
-        </tr>
-    </table>
-    <h3>Arcade Check Log:</h3>
-    <pre>{{ log }}</pre>
+            </thead>
+            <tbody>
+            {% for app in apps %}
+                <tr>
+                    <td>{{ app.label }}</td>
+                    <td>
+                        {% if app.version %}
+                            <span class="badge badge-ok">{{ app.version }}</span>
+                        {% else %}
+                            <span class="badge badge-stale">unknown</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ app.date or "n/a" }}</td>
+                    <td class="muted">{{ app.elapsed or "n/a" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Log card BELOW the versions -->
+    <div class="card log-container">
+        <div class="log-header">
+            <h2>Recent Log</h2>
+            {% if log_lines %}
+                <div class="muted">{{ log_lines }} most recent lines from {{ log_path }}</div>
+            {% endif %}
+        </div>
+        <div class="log-box">
+            {{ log | safe }}
+        </div>
+    </div>
+</div>
 </body>
 </html>
