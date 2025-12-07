@@ -17,13 +17,13 @@ services:
 
     volumes:
       # Config file: host -> container (read-only)
-      - /opt/arcade_app/config.ini:/config/arcade_app/config.ini:ro
+      - /config/arcade_app/config.ini:/config/arcade_app/config.ini:ro
 
       # Data directory for .ver files and lastcheck
-      - /opt/arcade_app/data:/data/arcade_app
+      - /config/arcade_app/data:/config/arcade_app/data
 
       # Log file for all checkers + web dashboard
-      - /opt/arcade_app/arcadecheck.log:/var/log/arcadecheck.log
+      - /var/log/arcadecheck.log:/var/log/arcadecheck.log
 
     # If you want health status exposed via docker ps / docker inspect
     healthcheck:
