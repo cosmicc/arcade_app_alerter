@@ -23,7 +23,7 @@ if [ ! -f "${HOST_CONFIG}" ]; then
     fi
     echo "[install] Creating initial config at ${HOST_CONFIG}..."
     sudo cp "${SCRIPT_DIR}/config.example.ini" "${HOST_CONFIG}"
-    sudo chmod 640 "${HOST_CONFIG}"
+    sudo chmod 666 "${HOST_CONFIG}"
 else
     echo "[install] Existing config found at ${HOST_CONFIG}, leaving it in place."
 fi
@@ -50,6 +50,6 @@ echo "[install] Host prep complete."
 echo "[install] Building and starting docker stack with docker compose..."
 
 cd "${SCRIPT_DIR}"
-docker compose up -d
+docker compose up -d --build
 
 echo "[install] Done. Web UI should be available on http://<host>:5000/"
