@@ -1,76 +1,274 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Arcade App Versions</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        body {
-            background-color: rgb(20,30, 1); /* Set gray background color */
-            font-family: Arial, sans-serif; /* Set font family */
-            color: rgb(255,255,186); /* Set light yellow text color */
-            margin: 0; /* Remove default margin */
-            padding: 20px; /* Add some padding to the body */
-        }
-        table {
-            width: 100%; /* Set table width to 100% */
-            border-collapse: collapse; /* Collapse table borders */
-            margin-top: 20px; /* Add margin to the top of the table */
-        }
-        th, td {
-            padding: 8px; /* Add padding to table cells */
-            border: 1px solid #ddd; /* Add border to table cells */
-            text-align: left; /* Set text alignment to left */
-        }
-        th {
-            background-color: rgb(255,255,186); /* Set light yellow background color for table headers */
-	    color: rgb(20,20,1);
-        }
-    </style>
+  <meta charset="utf-8">
+  <title>{{ page_title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050509;
+      --card-bg: #14141f;
+      --accent: #4dabf7;
+      --ok: #37b24d;
+      --warn: #fab005;
+      --err: #fa5252;
+      --text: #f1f3f5;
+      --muted: #868e96;
+      --border: #2b2f36;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle at top, #1c1c2a 0, #050509 55%);
+      color: var(--text);
+      font-family: var(--font-sans);
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      letter-spacing: 0.03em;
+    }
+
+    header .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr);
+      gap: 1rem;
+    }
+
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: rgba(12, 12, 22, 0.96);
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+      padding: 0.75rem 1rem 1rem;
+    }
+
+    .card h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .apps-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .apps-table th,
+    .apps-table td {
+      padding: 0.35rem 0.4rem;
+      border-bottom: 1px solid #202334;
+    }
+
+    .apps-table th {
+      text-align: left;
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+    }
+
+    .apps-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .app-name {
+      font-weight: 600;
+    }
+
+    .app-version {
+      font-family: var(--font-mono);
+    }
+
+    .app-date {
+      white-space: nowrap;
+      font-size: 0.8rem;
+    }
+
+    .app-elapsed {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .badge-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .lastcheck {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .lastcheck strong {
+      color: var(--text);
+    }
+
+    .log-pre {
+      margin: 0;
+      padding: 0.5rem 0.75rem;
+      background: #090913;
+      border-radius: 0.5rem;
+      border: 1px solid #232336;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 400px;
+      overflow: auto;
+    }
+
+    .log-caption {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      border-color: var(--accent);
+    }
+  </style>
+
+  <!-- Optional auto-refresh -->
+  <meta http-equiv="refresh" content="60">
 </head>
 <body>
-    <h1>Arcade Current Versions:</h1>
-    <table>
-            <tr>
-                    <td>Last Check:</td>
-                    <td>{{ lastcheckapp }}</td>
-                    <td>{{ lastcheckelapsed }}</td>
-                    <td>{{ lastcheckdate }}</td>
-            </tr>
-    </table>
-    <table>
-        <tr>
-            <th style="text-align: left;">Application</th>
-            <th style="text-align: left;">Version</th>
-	    <th style="text-align: left;">Elapsed Time</th>
-	    <th style="text-align: left;">Release Date</th>
-        </tr>
-        <tr>
-            <td>MAME</td>
-            <td>{{ mamever.strip() }}</td>
-            <td>{{ mameelapsed.strip() }}</td>
-	    <td>{{ mamedate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>Launchbox</td>
-            <td>{{ launchboxver.strip() }}</td>
-            <td>{{ launchboxelapsed.strip() }}</td>
-	    <td>{{ launchboxdate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>Retroarch</td>
-            <td>{{ retroarchver.strip() }}</td>
-            <td>{{ retroarchelapsed.strip() }}</td>
-	    <td>{{ retroarchdate.strip() }}</td>
-        </tr>
-        <tr>
-            <td>LedBlinky</td>
-            <td>{{ ledblinkyver.strip() }}</td>
-            <td>{{ ledblinkyelapsed.strip() }}</td>
-	    <td>{{ ledblinkydate.strip() }}</td>
-        </tr>
-    </table>
-    <h3>Arcade Check Log:</h3>
-    <pre>{{ log }}</pre>
+  <div class="page">
+    <header>
+      <div>
+        <h1>{{ page_title }}</h1>
+        {% if lastcheck %}
+          <div class="lastcheck">
+            Last check:
+            <strong>{{ lastcheck.date_display or "Unknown" }}</strong>
+            ({{ lastcheck.elapsed or "Unknown" }})  
+            <span>– {{ lastcheck.app or "Unknown app" }}</span>
+          </div>
+        {% endif %}
+      </div>
+      <div class="meta">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>Auto-refresh 60s</span>
+        </div>
+        <div style="margin-top: 0.25rem;">
+          <button class="button" onclick="window.location.reload()">
+            ⟳ Refresh
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Apps</h2>
+        {% if apps and apps|length > 0 %}
+          <table class="apps-table">
+            <thead>
+              <tr>
+                <th>App</th>
+                <th>Version</th>
+                <th>Release Date</th>
+                <th>Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for app in apps %}
+                <tr>
+                  <td class="app-name">{{ app.label }}</td>
+                  <td class="app-version">{{ app.version }}</td>
+                  <td class="app-date">{{ app.date_display }}</td>
+                  <td class="app-elapsed">{{ app.elapsed }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <div style="font-size: 0.9rem; color: var(--muted);">
+            No apps configured or no data files found.
+          </div>
+        {% endif %}
+      </section>
+
+      <section class="card">
+        <h2>Recent Log</h2>
+        {% if log_tail %}
+          <pre class="log-pre">{{ log_tail }}</pre>
+          <div class="log-caption">
+            File: <code>{{ log_path }}</code><br>
+            Showing last {{ log_lines }} lines
+          </div>
+        {% else %}
+          <div style="font-size: 0.85rem; color: var(--muted);">
+            No log data found at <code>{{ log_path }}</code>.
+          </div>
+        {% endif %}
+      </section>
+    </div>
+  </div>
 </body>
 </html>
